@@ -1,0 +1,119 @@
+Table USUARIO {
+    id_usuario INT [primary key]
+    nombre VARCHAR(100)
+    correo VARCHAR(100) [unique]
+    contrasena VARCHAR(255)
+    tipo_usuario VARCHAR(50)
+}
+
+Table LECCION {
+    id_leccion INT [primary key]
+    titulo VARCHAR(255)
+    descripcion TEXT
+    categoria VARCHAR(100)
+    nivel_dificultad VARCHAR(50)
+    puntos_otorgados INT [not null, default: 0]
+}
+
+Table EXAMEN {
+    id_examen INT [primary key]
+    titulo VARCHAR(255)
+    descripcion TEXT
+    nivel_dificultad VARCHAR(50)
+    puntos_otorgados INT [not null, default: 0]
+}
+
+Table PROGRESO {
+    id_progreso INT [primary key]
+    id_usuario INT [not null]
+    id_leccion INT [not null]
+    estado VARCHAR(50)
+    fecha_completado TIMESTAMP
+}
+
+Table RESULTADO_EXAMEN {
+    id_resultado INT [primary key]
+    id_usuario INT [not null]
+    id_examen INT [not null]
+    puntuacion INT [not null]
+    fecha TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+}
+
+Table RESULTADO_LECCION {
+    id_resultado_leccion INT [primary key]
+    id_usuario INT [not null]
+    id_leccion INT [not null]
+    puntuacion INT [not null]
+    fecha TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+}
+
+Table PUNTAJE_USUARIO {
+    id_puntaje INT [primary key]
+    id_usuario INT [not null]
+    puntos INT [default: 0]
+}
+
+Table PREMIO {
+    id_premio INT [primary key]
+    nombre VARCHAR(100)
+    descripcion TEXT
+    costo_puntos INT [not null]
+}
+
+Table CANJE_PREMIO {
+    id_canje INT [primary key]
+    id_usuario INT [not null]
+    id_premio INT [not null]
+    fecha TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+}
+
+Table RANKING {
+    id_ranking INT [primary key]
+    id_usuario INT [not null]
+    posicion INT
+    puntos_totales INT
+}
+
+Table PREGUNTA {
+    id_pregunta INT [primary key]
+    id_examen INT [not null]
+    texto_pregunta TEXT
+    tipo_pregunta VARCHAR(50)
+}
+
+Table OPCION {
+    id_opcion INT [primary key]
+    id_pregunta INT [not null]
+    texto_opcion TEXT
+    es_correcta BOOLEAN
+}
+
+Table HISTORIAL_NOTIFICACIONES {
+    id_historial INT [primary key]
+    id_usuario INT [not null]
+    mensaje TEXT
+    fecha_envio TIMESTAMP
+}
+
+Table BITACORA {
+    id_bitacora INT [primary key]
+    fecha_hora TIMESTAMP [not null, default: `CURRENT_TIMESTAMP`]
+    usuario VARCHAR(100) [not null]
+    tabla_afectada VARCHAR(100) [not null]
+    operacion VARCHAR(50) [not null, note: "Debe ser SELECT, INSERT, UPDATE o DELETE"]
+    detalles TEXT
+}
+
+Ref: PROGRESO.id_usuario > USUARIO.id_usuario
+Ref: PROGRESO.id_leccion > LECCION.id_leccion
+Ref: HISTORIAL_NOTIFICACIONES.id_usuario > USUARIO.id_usuario
+Ref: PREGUNTA.id_examen > EXAMEN.id_examen
+Ref: OPCION.id_pregunta > PREGUNTA.id_pregunta
+Ref: RESULTADO_EXAMEN.id_usuario > USUARIO.id_usuario
+Ref: RESULTADO_EXAMEN.id_examen > EXAMEN.id_examen
+Ref: RESULTADO_LECCION.id_usuario > USUARIO.id_usuario
+Ref: RESULTADO_LECCION.id_leccion > LECCION.id_leccion
+Ref: PUNTAJE_USUARIO.id_usuario > USUARIO.id_usuario
+Ref: CANJE_PREMIO.id_usuario > USUARIO.id_usuario
+Ref: CANJE_PREMIO.id_premio > PREMIO.id_premio
+Ref: RANKING.id_usuario > USUARIO.id_usuario
