@@ -1,8 +1,8 @@
 Table USER {
   user_id INT [pk]
-  name VARCHAR(100)
-  email VARCHAR(100) [unique]
-  password VARCHAR(255)
+  name VARCHAR(100) [not null]
+  email VARCHAR(100) [not null, unique]
+  password VARCHAR(255) [not null]
   role_id INT [not null, ref: > USER_ROLE.role_id]
 }
 
@@ -14,10 +14,11 @@ Table USER_ROLE {
 
 Table LESSON {
   lesson_id INT [pk]
-  title VARCHAR(255)
+  title VARCHAR(255) [not null]
   description TEXT
-  difficulty_level VARCHAR(50)
+  difficulty_level VARCHAR(50) [not null, note: 'Values: simple, advanced']
   points_awarded INT [not null, default: 0]
+  Note: 'CHECK (difficulty_level IN (\'simple\', \'advanced\'))'
 }
 
 Table LESSON_CATEGORY {
@@ -33,17 +34,18 @@ Table LESSON_CATEGORY_REL {
 
 Table EXAM {
   exam_id INT [pk]
-  title VARCHAR(255)
+  title VARCHAR(255) [not null]
   description TEXT
-  difficulty_level VARCHAR(50)
+  difficulty_level VARCHAR(50) [not null, note: 'Values: simple, advanced']
   points_awarded INT [not null, default: 0]
+  Note: 'CHECK (difficulty_level IN (\'simple\', \'advanced\'))'
 }
 
 Table PROGRESS {
   progress_id INT [pk]
   user_id INT [not null, ref: > USER.user_id]
   lesson_id INT [not null, ref: > LESSON.lesson_id]
-  status VARCHAR(50)
+  status VARCHAR(50) [not null]
   completion_date TIMESTAMP
 }
 
