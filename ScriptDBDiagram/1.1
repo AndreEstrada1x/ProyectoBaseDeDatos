@@ -1,0 +1,134 @@
+Table USER {
+  user_id INT [pk]
+  name VARCHAR(100)
+  email VARCHAR(100) [unique]
+  password VARCHAR(255)
+  role_id INT [not null, ref: > USER_ROLE.role_id]
+}
+
+Table USER_ROLE {
+  role_id INT [pk]
+  role_name VARCHAR(50) [not null, unique]
+  description TEXT
+}
+
+Table LESSON {
+  lesson_id INT [pk]
+  title VARCHAR(255)
+  description TEXT
+  difficulty_level VARCHAR(50)
+  points_awarded INT [not null, default: 0]
+}
+
+Table LESSON_CATEGORY {
+  category_id INT [pk]
+  category_name VARCHAR(100) [not null, unique]
+}
+
+Table LESSON_CATEGORY_REL {
+  lesson_id INT [not null, ref: > LESSON.lesson_id]
+  category_id INT [not null, ref: > LESSON_CATEGORY.category_id]
+  Primary Key (lesson_id, category_id)
+}
+
+Table EXAM {
+  exam_id INT [pk]
+  title VARCHAR(255)
+  description TEXT
+  difficulty_level VARCHAR(50)
+  points_awarded INT [not null, default: 0]
+}
+
+Table PROGRESS {
+  progress_id INT [pk]
+  user_id INT [not null, ref: > USER.user_id]
+  lesson_id INT [not null, ref: > LESSON.lesson_id]
+  status VARCHAR(50)
+  completion_date TIMESTAMP
+}
+
+Table EXAM_PROGRESS {
+  exam_progress_id INT [pk]
+  user_id INT [not null, ref: > USER.user_id]
+  exam_id INT [not null, ref: > EXAM.exam_id]
+  status VARCHAR(50) [not null]
+  completion_date TIMESTAMP
+}
+
+Table EXAM_RESULT {
+  exam_result_id INT [pk]
+  user_id INT [not null, ref: > USER.user_id]
+  exam_id INT [not null, ref: > EXAM.exam_id]
+  score INT [not null]
+  date TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+}
+
+Table LESSON_RESULT {
+  lesson_result_id INT [pk]
+  user_id INT [not null, ref: > USER.user_id]
+  lesson_id INT [not null, ref: > LESSON.lesson_id]
+  score INT [not null]
+  date TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+}
+
+Table USER_SCORE {
+  score_id INT [pk]
+  user_id INT [not null, ref: > USER.user_id]
+  total_points INT [default: 0]
+}
+
+Table REWARD {
+  reward_id INT [pk]
+  name VARCHAR(100)
+  description TEXT
+  cost_points INT [not null]
+}
+
+Table REWARD_REDEMPTION {
+  redemption_id INT [pk]
+  user_id INT [not null, ref: > USER.user_id]
+  reward_id INT [not null, ref: > REWARD.reward_id]
+  date TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+}
+
+Table LEADERBOARD {
+  leaderboard_id INT [pk]
+  user_id INT [not null, ref: > USER.user_id]
+  position INT [not null]
+  total_points INT [not null]
+}
+
+Table QUESTION {
+  question_id INT [pk]
+  question_text TEXT
+  question_type VARCHAR(50)
+}
+
+Table EXAM_QUESTION {
+  exam_id INT [not null, ref: > EXAM.exam_id]
+  question_id INT [not null, ref: > QUESTION.question_id]
+  Primary Key (exam_id, question_id)
+}
+
+Table ANSWER_OPTION {
+  option_id INT [pk]
+  question_id INT [not null, ref: > QUESTION.question_id]
+  option_text TEXT
+  is_correct BOOLEAN
+}
+
+Table NOTIFICATION_HISTORY {
+  notification_id INT [pk]
+  user_id INT [not null, ref: > USER.user_id]
+  message TEXT
+  sent_date TIMESTAMP
+}
+
+Table LOG {
+  log_id INT [pk]
+  timestamp TIMESTAMP [not null, default: `CURRENT_TIMESTAMP`]
+  user VARCHAR(100) [not null]
+  affected_table VARCHAR(100) [not null]
+  operation VARCHAR(50) [not null]
+  details TEXT
+}
