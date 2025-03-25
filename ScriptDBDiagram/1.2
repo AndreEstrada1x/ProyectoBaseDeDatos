@@ -2,7 +2,7 @@ Table USER {
   user_id INT [pk]
   name VARCHAR(100) [not null]
   email VARCHAR(100) [not null, unique]
-  password VARCHAR(255) [not null]
+  password CHAR(60) [not null]
   role_id INT [not null, ref: > USER_ROLE.role_id]
 }
 
@@ -103,7 +103,7 @@ Table LEADERBOARD {
 Table QUESTION {
   question_id INT [pk]
   question_text TEXT
-  question_type VARCHAR(50)
+  question_type ENUM('multiple_choice', 'true_false', 'short_answer')
 }
 
 Table EXAM_QUESTION {
